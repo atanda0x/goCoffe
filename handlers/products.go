@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/atanda0x/gopher-jwt-auth/data"
+	"github.com/atanda0x/goCoffe/data"
 )
 
 type Coffee struct {
