@@ -8,7 +8,7 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/atanda0x/gopher-jwt-auth/handlers"
+	"github.com/atanda0x/goCoffe/handlers"
 )
 
 func main() {
@@ -21,9 +21,8 @@ func main() {
 	sm.Handle("/", ch)
 
 	s := &http.Server{
-		Addr:         ":8080", // Configure the bind address
-		Handler:      sm,      // Set the default handler
-		ErrorLog:     l,
+		Addr:         ":8080",           // Configure the bind address
+		Handler:      sm,                // Set the default handler
 		IdleTimeout:  120 * time.Second, // Max time for connections using TCP keep-Alive
 		ReadTimeout:  1 * time.Second,   // Max time to read request from the client
 		WriteTimeout: 1 * time.Second,   // Max time to write response to the clent
