@@ -20,15 +20,36 @@ type Coffee struct {
 	DeletedAt   string  `json:"-"`
 }
 
+func (c *Coffee) FromJSON(r io.Reader) error {
+	e := json.NewDecoder(r)
+	return e.Decode(c)
+}
+
+// Coffees is a collection of 	Coffee
 type Coffees []*Coffee
 
+// ToJSON serialized the contents of the collectiion to JSON
+// NewEncoder provides better performance than json.Unmarshal as it does not
+// have to buffer the output an in memory slice of bytes
+// this reduces allocation and the overheads of the service
 func (c *Coffees) ToJSON(w io.Writer) error {
 	e := json.NewEncoder(w)
 	return e.Encode(c)
 }
 
+// GetCoffee retuens a list of Coffees
 func GetCoffees() Coffees {
 	return CoffeeList
+}
+
+func AddCoffe(c *Coffee) {
+	c.ID = getNextId()
+	CoffeeList = append(CoffeeList, c)
+}
+
+func getNextId() int {
+	lc := CoffeeList[len(CoffeeList)-1]
+	return lc.ID
 }
 
 var CoffeeList = []*Coffee{
@@ -249,7 +270,7 @@ var CoffeeList = []*Coffee{
 	},
 
 	&Coffee{
-		ID:          18,
+		ID:          19,
 		Name:        "Iced Coffee",
 		Description: "Iced coffees become very popular in the summertime in the United States. The recipes do have some variance, with some locations choosing to interchange milk with water in the recipe. Often, different flavoring syrups will be added per the preference of the customer. You can even top it off with some cold foam",
 		Price:       3.45,
