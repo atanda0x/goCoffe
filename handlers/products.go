@@ -3,6 +3,8 @@ package handlers
 import (
 	"log"
 	"net/http"
+	"regexp"
+	"strconv"
 
 	"github.com/atanda0x/goCoffe/data"
 )
@@ -24,6 +26,34 @@ func (c *Coffee) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		c.AddCoffe(w, r)
 		return
+	}
+
+	if r.Method == http.MethodPut {
+		c.l.Println("PUT", r.URL.Path)
+
+		// expect the id int URI
+		reg := regexp.MustCompile(`/([0-9]+)`)
+		g := reg.FindAllStringSubmatch(r.URL.Path, -1)
+
+		if len(g) != 1 {
+			c.l.Println("Invalid URI more than one id")
+			http.Error(w, "Invalid URI", http.StatusBadRequest)
+			return
+		}
+
+		if len(g[0]) != 2 {
+			c.l.Println("Invalid URI more than one capture group")
+			http.Error(w, "Ivaid URI", http.StatusBadRequest)
+			return
+		}
+
+		idString := g[0][1]
+		id, err := strconv.Atoi(idString)
+		if err != nil {
+			c.l.Println("Invalid URI unable to convert to number", idString)
+			http.Error(w, "Invalid URL", http.StatusBadRequest)
+		}
+		c.updateCoffee(id, w http.ResponseWriter, r *http.Request)
 	}
 
 	// catch all
@@ -55,4 +85,8 @@ func (c *Coffee) AddCoffe(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data.AddCoffe(coff)
+}
+
+func (c *Coffee) updateCoffee(w http.ResponseWriter, r *http.Request) {
+
 }
