@@ -53,7 +53,9 @@ func (c *Coffee) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			c.l.Println("Invalid URI unable to convert to number", idString)
 			http.Error(w, "Invalid URL", http.StatusBadRequest)
 		}
-		c.updateCoffee(id, w http.ResponseWriter, r *http.Request)
+
+		c.updateCoffee(id, w, r)
+		return
 	}
 
 	// catch all
@@ -87,6 +89,25 @@ func (c *Coffee) AddCoffe(w http.ResponseWriter, r *http.Request) {
 	data.AddCoffe(coff)
 }
 
-func (c *Coffee) updateCoffee(w http.ResponseWriter, r *http.Request) {
+func (c *Coffee) updateCoffee(id int, w http.ResponseWriter, r *http.Request) {
+	c.l.Println("Handle PUT Product")
 
+	coff := &data.Coffee{}
+
+	err := coff.FromJSON(r.Body)
+	if err != nil {
+		http.Error(w, "Unable to unmarshal json", http.StatusBadRequest)
+
+	}
+
+	err = data.UpdatedCoffee(id, coff)
+	if err == data.ErrorCoffeeNotFound {
+		http.Error(w, "Coffe not found", http.StatusNotFound)
+		return
+	}
+
+	if err != nil {
+		http.Error(w, "Coffee not found", http.StatusInternalServerError)
+		return
+	}
 }

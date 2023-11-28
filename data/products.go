@@ -2,6 +2,7 @@ package data
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"time"
 )
@@ -45,6 +46,28 @@ func GetCoffees() Coffees {
 func AddCoffe(c *Coffee) {
 	c.ID = getNextId()
 	CoffeeList = append(CoffeeList, c)
+}
+
+func UpdatedCoffee(id int, c *Coffee) error {
+	_, cof, err := findCoffee(id)
+	if err != nil {
+		return err
+	}
+	c.ID = id
+	CoffeeList[cof] = c
+
+	return nil
+}
+
+var ErrorCoffeeNotFound = fmt.Errorf("Coffee not found")
+
+func findCoffee(id int) (*Coffee, int, error) {
+	for i, c := range CoffeeList {
+		if c.ID == id {
+			return c, i, nil
+		}
+	}
+	return nil, -1, ErrorCoffeeNotFound
 }
 
 func getNextId() int {

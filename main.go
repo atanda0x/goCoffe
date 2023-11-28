@@ -30,7 +30,7 @@ func main() {
 
 	// Start the server
 	go func() {
-		l.Println("Starting server on port 8080")
+		l.Println("Starting server on port :8080")
 
 		err := s.ListenAndServe()
 		if err != nil {
