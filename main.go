@@ -21,13 +21,15 @@ func main() {
 	sm := mux.NewRouter()
 
 	getRouter := sm.Methods(http.MethodGet).Subrouter()
-	getRouter.HandleFunc("/getCoffee", ch.GetCoffees)
+	getRouter.HandleFunc("/Coffee/get", ch.GetCoffees)
 
 	putRouter := sm.Methods(http.MethodPut).Subrouter()
-	putRouter.HandleFunc("/updateCoffee/{id:[0-9]+}", ch.UpdateCoffee)
+	putRouter.HandleFunc("/Coffee/update/{id:[0-9]+}", ch.UpdateCoffee)
+	putRouter.Use(ch.MiddlewareCoffeeValid)
 
 	postRouter := sm.Methods(http.MethodPost).Subrouter()
-	postRouter.HandleFunc("/addCoffee", ch.AddCoffe)
+	postRouter.HandleFunc("/Coffee/add", ch.AddCoffe)
+	postRouter.Use(ch.MiddlewareCoffeeValid)
 
 	// sm.Handle("/", ch)
 

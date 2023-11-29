@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"strconv"
@@ -33,14 +34,8 @@ func (c *Coffee) GetCoffees(w http.ResponseWriter, r *http.Request) {
 func (c *Coffee) AddCoffe(w http.ResponseWriter, r *http.Request) {
 	c.l.Println("Handle POST Coffee")
 
-	coff := &data.Coffee{}
-
-	err := coff.FromJSON(r.Body)
-	if err != nil {
-		http.Error(w, "unable to unmarshal json", http.StatusBadRequest)
-	}
-
-	data.AddCoffe(coff)
+	coff := r.Context().Value(KeyCoffee{}).(data.Coffee)
+	data.AddCoffe(&coff)
 }
 
 func (c *Coffee) UpdateCoffee(w http.ResponseWriter, r *http.Request) {
@@ -52,16 +47,9 @@ func (c *Coffee) UpdateCoffee(w http.ResponseWriter, r *http.Request) {
 	}
 
 	c.l.Println("Handle PUT Product", id)
+	coff := r.Context().Value(KeyCoffee{}).(data.Coffee)
 
-	coff := &data.Coffee{}
-
-	err = coff.FromJSON(r.Body)
-	if err != nil {
-		http.Error(w, "Unable to unmarshal json", http.StatusBadRequest)
-
-	}
-
-	err = data.UpdatedCoffee(id, coff)
+	err = data.UpdatedCoffee(id, &coff)
 	if err == data.ErrorCoffeeNotFound {
 		http.Error(w, "Coffe not found", http.StatusNotFound)
 		return
@@ -71,4 +59,24 @@ func (c *Coffee) UpdateCoffee(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Coffee not found", http.StatusInternalServerError)
 		return
 	}
+}
+
+type KeyCoffee struct{}
+
+func (c *Coffee) MiddlewareCoffeeValid(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		coff := &data.Coffee{}
+
+		err := coff.FromJSON(r.Body)
+		if err != nil {
+			http.Error(w, "Unable to unmarshal json", http.StatusBadRequest)
+			return
+		}
+
+		ctx := context.WithValue(r.Context(), KeyCoffee{}, coff)
+		r = r.WithContext(ctx)
+
+		next.ServeHTTP(w, r)
+	})
+
 }
