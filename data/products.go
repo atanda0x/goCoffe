@@ -4,18 +4,21 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"regexp"
 	"time"
+
+	"github.com/go-playground/validator/v10"
 )
 
 // Product defines the sttructure of the coffee API
 type Coffee struct {
 	ID          int     `json:"id"`
-	Name        string  `json:"name"`
+	Name        string  `json:"name" validate:"required"`
 	Description string  `json:"description"`
-	Price       float32 `json:"price"`
-	SKU         string  `json:"sku"`
-	Ratio       string  `json:"ratio"`
-	Cup         string  `json:"cup"`
+	Price       float32 `json:"price" validate:"gt=0"`
+	SKU         string  `json:"sku" validate:"required,sku"`
+	Ratio       string  `json:"ratio" validate:"required"`
+	Cup         string  `json:"cup" validate:"required"`
 	CreatedAt   string  `json:"-"`
 	UpdatedAt   string  `json:"-"`
 	DeletedAt   string  `json:"-"`
@@ -24,6 +27,24 @@ type Coffee struct {
 func (c *Coffee) FromJSON(r io.Reader) error {
 	e := json.NewDecoder(r)
 	return e.Decode(c)
+}
+
+func (c *Coffee) Validate() error {
+	validate := validator.New()
+	validate.RegisterValidation("sku", validateSKU)
+	return validate.Struct(c)
+
+}
+
+func validateSKU(fl validator.FieldLevel) bool {
+	// sku is of format abc-absd-dfst
+	reg := regexp.MustCompile(`[a-z]+-[a-z]+-[a-z]+`)
+	matches := reg.FindAllString(fl.Field().String(), -1)
+	if len(matches) == 1 {
+		return true
+	}
+
+	return false
 }
 
 // Coffees is a collection of 	Coffee
