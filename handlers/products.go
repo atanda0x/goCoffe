@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -65,12 +66,19 @@ type KeyCoffee struct{}
 
 func (c *Coffee) MiddlewareCoffeeValid(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		coff := &data.Coffee{}
+		coff := data.Coffee{}
 
 		err := coff.FromJSON(r.Body)
 		if err != nil {
+			c.l.Println("[ERROR] deserialing coffee", err)
 			http.Error(w, "Unable to unmarshal json", http.StatusBadRequest)
 			return
+		}
+
+		err = coff.Validate()
+		if err != nil {
+			c.l.Println("[ERROR] validating coffee", err)
+			http.Error(w, fmt.Sprintf("Error reading coffee: %s", err), http.StatusBadRequest)
 		}
 
 		ctx := context.WithValue(r.Context(), KeyCoffee{}, coff)
