@@ -3,10 +3,10 @@ package handlers
 import (
 	"log"
 	"net/http"
-	"regexp"
 	"strconv"
 
 	"github.com/atanda0x/goCoffe/data"
+	"github.com/gorilla/mux"
 )
 
 type Coffee struct {
@@ -15,52 +15,6 @@ type Coffee struct {
 
 func NewCoffee(l *log.Logger) *Coffee {
 	return &Coffee{l}
-}
-
-func (c *Coffee) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodGet {
-		c.GetCoffees(w, r)
-		return
-	}
-
-	if r.Method == http.MethodPost {
-		c.AddCoffe(w, r)
-		return
-	}
-
-	if r.Method == http.MethodPut {
-		c.l.Println("PUT", r.URL.Path)
-
-		// expect the id int URI
-		reg := regexp.MustCompile(`/([0-9]+)`)
-		g := reg.FindAllStringSubmatch(r.URL.Path, -1)
-
-		if len(g) != 1 {
-			c.l.Println("Invalid URI more than one id")
-			http.Error(w, "Invalid URI", http.StatusBadRequest)
-			return
-		}
-
-		if len(g[0]) != 2 {
-			c.l.Println("Invalid URI more than one capture group")
-			http.Error(w, "Ivaid URI", http.StatusBadRequest)
-			return
-		}
-
-		idString := g[0][1]
-		id, err := strconv.Atoi(idString)
-		if err != nil {
-			c.l.Println("Invalid URI unable to convert to number", idString)
-			http.Error(w, "Invalid URL", http.StatusBadRequest)
-		}
-
-		c.updateCoffee(id, w, r)
-		return
-	}
-
-	// catch all
-	// If no method is satisfied return an error
-	w.WriteHeader(http.StatusMethodNotAllowed)
 }
 
 func (c *Coffee) GetCoffees(w http.ResponseWriter, r *http.Request) {
@@ -89,12 +43,19 @@ func (c *Coffee) AddCoffe(w http.ResponseWriter, r *http.Request) {
 	data.AddCoffe(coff)
 }
 
-func (c *Coffee) updateCoffee(id int, w http.ResponseWriter, r *http.Request) {
-	c.l.Println("Handle PUT Product")
+func (c *Coffee) UpdateCoffee(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		http.Error(w, "unable to convert id", http.StatusBadRequest)
+		return
+	}
+
+	c.l.Println("Handle PUT Product", id)
 
 	coff := &data.Coffee{}
 
-	err := coff.FromJSON(r.Body)
+	err = coff.FromJSON(r.Body)
 	if err != nil {
 		http.Error(w, "Unable to unmarshal json", http.StatusBadRequest)
 

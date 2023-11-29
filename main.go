@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/atanda0x/goCoffe/handlers"
+	"github.com/gorilla/mux"
 )
 
 func main() {
@@ -17,8 +18,18 @@ func main() {
 	// Coffee handler
 	ch := handlers.NewCoffee(l)
 
-	sm := http.NewServeMux()
-	sm.Handle("/", ch)
+	sm := mux.NewRouter()
+
+	getRouter := sm.Methods(http.MethodGet).Subrouter()
+	getRouter.HandleFunc("/getCoffee", ch.GetCoffees)
+
+	putRouter := sm.Methods(http.MethodPut).Subrouter()
+	putRouter.HandleFunc("/updateCoffee/{id:[0-9]+}", ch.UpdateCoffee)
+
+	postRouter := sm.Methods(http.MethodPost).Subrouter()
+	postRouter.HandleFunc("/addCoffee", ch.AddCoffe)
+
+	// sm.Handle("/", ch)
 
 	s := &http.Server{
 		Addr:         ":8080",           // Configure the bind address
