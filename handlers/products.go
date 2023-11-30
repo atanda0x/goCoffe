@@ -1,3 +1,18 @@
+// Package classification of Coffee Product API
+//
+// Documentation for Coffee Product API
+//
+// SCHEMA: http
+// BasePath: /Coffee
+// Version: 1.0.0
+//
+//Consumes:
+// - application/json
+//
+// Produces:
+// - application/json
+//swagger:meta
+
 package handlers
 
 import (

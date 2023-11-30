@@ -1,4 +1,5 @@
 server:
-	go run main.go
+	@go run main.go
 
-.PHONY: server
+swagger:
+	@swagger generate spec -o ./swagger.yaml –scan-models
