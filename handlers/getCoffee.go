@@ -9,11 +9,13 @@ import (
 // @swagger:route GET /Coffee/get coffees listCoffees
 // @Returns a list of coffees
 // @responses:
-// 	@200: productsResponse
+// 	@200: coffeesResponse
 
 // GetCoffee returns the coffee from the data db
 func (c *Coffee) GetCoffees(w http.ResponseWriter, r *http.Request) {
 	c.l.Println("Handle GET Coffee")
+
+	w.Header().Add("Content-Type", "application/json")
 
 	// fetch the coffee from the datastore
 	lc := data.GetCoffees()
