@@ -10,6 +10,7 @@ import (
 
 	_ "github.com/atanda0x/goCoffe/docs"
 	"github.com/atanda0x/goCoffe/handlers"
+	"github.com/go-openapi/runtime/middleware"
 	"github.com/gorilla/mux"
 	httpSwagger "github.com/swaggo/http-swagger/v2"
 )
@@ -48,6 +49,12 @@ func main() {
 	postRouter := sm.Methods(http.MethodPost).Subrouter()
 	postRouter.HandleFunc("/Coffee/create", ch.AddCoffe)
 	postRouter.Use(ch.MiddlewareCoffeeValid)
+
+	ops := middleware.RedocOpts{SpecURL: "/doc/swagger.yaml"}
+	sh := middleware.Redoc(ops, nil)
+
+	getRouter.Handle("/docs", sh)
+	getRouter.Handle("/swagger.yaml", http.FileServer(http.Dir("./")))
 
 	// sm.Handle("/", ch)
 
