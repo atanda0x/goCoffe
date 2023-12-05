@@ -17,6 +17,14 @@ type coffeeResponse struct {
 	Body []data.Coffee
 }
 
+// @swagger:parameters deleteCoffee
+type coffeeIDParameterWrapper struct {
+	// @The id of the product to delete from the db
+	// @in: path
+	// @required: true
+	ID int `json:"id"`
+}
+
 // Coffee is a http.Handler
 type Coffee struct {
 	l *log.Logger

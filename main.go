@@ -50,6 +50,9 @@ func main() {
 	postRouter.HandleFunc("/Coffee/create", ch.AddCoffe)
 	postRouter.Use(ch.MiddlewareCoffeeValid)
 
+	deleteRouter := sm.Methods(http.MethodDelete).Subrouter()
+	deleteRouter.HandleFunc("/Coffee/delete/{id:[0-9]+}", ch.DeleteCoffee)
+
 	ops := middleware.RedocOpts{SpecURL: "/doc/swagger.yaml"}
 	sh := middleware.Redoc(ops, nil)
 
