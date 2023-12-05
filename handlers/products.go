@@ -17,6 +17,10 @@ type coffeeResponse struct {
 	Body []data.Coffee
 }
 
+// @swagger:response noContent
+type coffeeNoContent struct {
+}
+
 // @swagger:parameters deleteCoffee
 type coffeeIDParameterWrapper struct {
 	// @The id of the product to delete from the db

@@ -11,7 +11,13 @@ import (
 )
 
 // Product defines the sttructure of the coffee API
+
+// @swagger:model
 type Coffee struct {
+	// @the id for this user
+	// @
+	// @required:true
+	// @min: 1
 	ID          int     `json:"id"`
 	Name        string  `json:"name" validate:"required"`
 	Description string  `json:"description"`
@@ -78,6 +84,10 @@ func UpdatedCoffee(id int, c *Coffee) error {
 	CoffeeList[cof] = c
 
 	return nil
+}
+
+func DeleteCoffee(id int, c *Coffee) error {
+
 }
 
 var ErrorCoffeeNotFound = fmt.Errorf("Coffee not found")
