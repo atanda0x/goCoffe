@@ -1,0 +1,13 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "classification of Coffee Product API",
+        "contact": {
+            "name": "Atanda Nafiu",
+            "url": "https://github.com/atanda0x",
+            "email": "atanadakolapo@gmail.com"
+        }
+    },
+    "host": "localhost:8080",
+    "paths": {}
+}

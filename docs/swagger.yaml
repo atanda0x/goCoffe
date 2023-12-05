@@ -1,0 +1,9 @@
+host: localhost:8080
+info:
+  contact:
+    email: atanadakolapo@gmail.com
+    name: Atanda Nafiu
+    url: https://github.com/atanda0x
+  title: classification of Coffee Product API
+paths: {}
+swagger: "2.0"

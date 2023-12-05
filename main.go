@@ -8,9 +8,26 @@ import (
 	"os/signal"
 	"time"
 
+	_ "github.com/atanda0x/goCoffe/docs"
 	"github.com/atanda0x/goCoffe/handlers"
 	"github.com/gorilla/mux"
+	httpSwagger "github.com/swaggo/http-swagger/v2"
 )
+
+// @title classification of Coffee Product API
+//
+// @Documentation for Coffee Product API222
+//
+// @SCHEMA: http
+// @BasePath: /Coffee/v2
+// @Version: 1
+//
+// @contact.name Atanda Nafiu
+// @contact.url https://github.com/atanda0x
+// @contact.email atanadakolapo@gmail.com
+//
+//
+// @swagger:meta
 
 func main() {
 	l := log.New(os.Stdout, "Coffee-api", log.LstdFlags)
@@ -19,6 +36,7 @@ func main() {
 	ch := handlers.NewCoffee(l)
 
 	sm := mux.NewRouter()
+	sm.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
 
 	getRouter := sm.Methods(http.MethodGet).Subrouter()
 	getRouter.HandleFunc("/Coffee/get", ch.GetCoffees)
@@ -28,7 +46,7 @@ func main() {
 	putRouter.Use(ch.MiddlewareCoffeeValid)
 
 	postRouter := sm.Methods(http.MethodPost).Subrouter()
-	postRouter.HandleFunc("/Coffee/add", ch.AddCoffe)
+	postRouter.HandleFunc("/Coffee/create", ch.AddCoffe)
 	postRouter.Use(ch.MiddlewareCoffeeValid)
 
 	// sm.Handle("/", ch)
