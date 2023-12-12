@@ -12,6 +12,7 @@ import (
 	"github.com/atanda0x/goCoffe/handlers"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 	httpSwagger "github.com/swaggo/http-swagger/v2"
 )
 
@@ -60,13 +61,17 @@ func main() {
 	getRouter.Handle("/swagger.yaml", http.FileServer(http.Dir("./")))
 
 	// @CORS
-	rh := gohandlers.CORS(gohandlers.AllowedOrigin([]string{"http://localhost:8080"}))
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http:localhost:8080"},
+		AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodDelete},
+		AllowCredentials: true,
+	})
 
 	// sm.Handle("/", ch)
 
 	s := &http.Server{
 		Addr:         ":8080",           // Configure the bind address
-		Handler:      rh(sm),            // Set the default handler
+		Handler:      c.Handler(sm),     // Set the default handler
 		IdleTimeout:  120 * time.Second, // Max time for connections using TCP keep-Alive
 		ReadTimeout:  1 * time.Second,   // Max time to read request from the client
 		WriteTimeout: 1 * time.Second,   // Max time to write response to the clent

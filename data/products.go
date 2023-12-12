@@ -10,6 +10,9 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+// ErrProductNotFound is an error raised when a product can not be found in the database
+var ErrProductNotFound = fmt.Errorf("Product not found")
+
 // Product defines the sttructure of the coffee API
 
 // @swagger:model
@@ -87,6 +90,11 @@ func UpdatedCoffee(id int, c *Coffee) error {
 }
 
 func DeleteCoffee(id int, c *Coffee) error {
+	_, cof, err := findCoffee(id)
+	if err != nil {
+		return err
+	}
+	CoffeeList = append(CoffeeList[:cof], CoffeeList[cof+1])
 	return nil
 }
 

@@ -34,6 +34,7 @@ require (
 	github.com/oklog/ulid v1.3.1 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/rogpeppe/go-internal v1.11.0 // indirect
+	github.com/rs/cors v1.10.1 // indirect
 	github.com/swaggo/files/v2 v2.0.0 // indirect
 	go.mongodb.org/mongo-driver v1.11.3 // indirect
 	golang.org/x/crypto v0.16.0 // indirect
