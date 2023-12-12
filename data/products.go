@@ -87,7 +87,7 @@ func UpdatedCoffee(id int, c *Coffee) error {
 }
 
 func DeleteCoffee(id int, c *Coffee) error {
-
+	return nil
 }
 
 var ErrorCoffeeNotFound = fmt.Errorf("Coffee not found")

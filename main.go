@@ -59,11 +59,14 @@ func main() {
 	getRouter.Handle("/docs", sh)
 	getRouter.Handle("/swagger.yaml", http.FileServer(http.Dir("./")))
 
+	// @CORS
+	rh := gohandlers.CORS(gohandlers.AllowedOrigin([]string{"http://localhost:8080"}))
+
 	// sm.Handle("/", ch)
 
 	s := &http.Server{
 		Addr:         ":8080",           // Configure the bind address
-		Handler:      sm,                // Set the default handler
+		Handler:      rh(sm),            // Set the default handler
 		IdleTimeout:  120 * time.Second, // Max time for connections using TCP keep-Alive
 		ReadTimeout:  1 * time.Second,   // Max time to read request from the client
 		WriteTimeout: 1 * time.Second,   // Max time to write response to the clent
