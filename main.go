@@ -13,23 +13,20 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
-	httpSwagger "github.com/swaggo/http-swagger/v2"
+	httpSwagger "github.com/swaggo/http-swagger"
+	_ "github.com/swaggo/http-swagger/example/gorilla/docs"
 )
 
 // @title classification of Coffee Product API
-//
-// @Documentation for Coffee Product API222
-//
-// @SCHEMA: http
-// @BasePath: /Coffee/v2
-// @Version: 1
+// @Description for Coffee Product API
+// @version 1.0
 //
 // @contact.name Atanda Nafiu
 // @contact.url https://github.com/atanda0x
 // @contact.email atanadakolapo@gmail.com
 //
-//
-// @swagger:meta
+// @host localhost:8080
+//  @BasePath /Coffee/v2
 
 func main() {
 	l := log.New(os.Stdout, "Coffee-api", log.LstdFlags)
@@ -38,7 +35,7 @@ func main() {
 	ch := handlers.NewCoffee(l)
 
 	sm := mux.NewRouter()
-	sm.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
+	sm.PathPrefix("/swagger/*any").Handler(httpSwagger.WrapHandler)
 
 	getRouter := sm.Methods(http.MethodGet).Subrouter()
 	getRouter.HandleFunc("/Coffee/get", ch.GetCoffees)
@@ -51,8 +48,8 @@ func main() {
 	postRouter.HandleFunc("/Coffee/create", ch.AddCoffe)
 	postRouter.Use(ch.MiddlewareCoffeeValid)
 
-	deleteRouter := sm.Methods(http.MethodDelete).Subrouter()
-	deleteRouter.HandleFunc("/Coffee/delete/{id:[0-9]+}", ch.DeleteCoffee)
+	// deleteRouter := sm.Methods(http.MethodDelete).Subrouter()
+	// deleteRouter.HandleFunc("/Coffee/delete/{id:[0-9]+}", ch.DeleteCoffee)
 
 	ops := middleware.RedocOpts{SpecURL: "/doc/swagger.yaml"}
 	sh := middleware.Redoc(ops, nil)

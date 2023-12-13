@@ -1,9 +1,12 @@
+basePath: /Coffee/v2
 host: localhost:8080
 info:
   contact:
     email: atanadakolapo@gmail.com
     name: Atanda Nafiu
     url: https://github.com/atanda0x
+  description: for Coffee Product API
   title: classification of Coffee Product API
+  version: "1.0"
 paths: {}
 swagger: "2.0"

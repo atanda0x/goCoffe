@@ -6,7 +6,9 @@ require (
 	github.com/go-openapi/runtime v0.26.0
 	github.com/go-playground/validator/v10 v10.16.0
 	github.com/gorilla/mux v1.8.1
-	github.com/swaggo/http-swagger/v2 v2.0.0
+	github.com/rs/cors v1.10.1
+	github.com/swaggo/http-swagger v1.3.4
+	github.com/swaggo/http-swagger/example/gorilla v0.0.0-20230830153024-537f045bded0
 	github.com/swaggo/swag v1.16.2
 )
 
@@ -34,8 +36,7 @@ require (
 	github.com/oklog/ulid v1.3.1 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/rogpeppe/go-internal v1.11.0 // indirect
-	github.com/rs/cors v1.10.1 // indirect
-	github.com/swaggo/files/v2 v2.0.0 // indirect
+	github.com/swaggo/files v0.0.0-20220610200504-28940afbdbfe // indirect
 	go.mongodb.org/mongo-driver v1.11.3 // indirect
 	golang.org/x/crypto v0.16.0 // indirect
 	golang.org/x/net v0.19.0 // indirect

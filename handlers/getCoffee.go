@@ -6,7 +6,7 @@ import (
 	"github.com/atanda0x/goCoffe/data"
 )
 
-// @swagger:route GET /Coffee/get coffees listCoffees
+// @sroute GET /Coffee/get coffees listCoffees
 // @Returns a list of coffees
 // @responses:
 // 	@200: coffeesResponse

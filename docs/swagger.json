@@ -1,13 +1,16 @@
 {
     "swagger": "2.0",
     "info": {
+        "description": "for Coffee Product API",
         "title": "classification of Coffee Product API",
         "contact": {
             "name": "Atanda Nafiu",
             "url": "https://github.com/atanda0x",
             "email": "atanadakolapo@gmail.com"
-        }
+        },
+        "version": "1.0"
     },
     "host": "localhost:8080",
+    "basePath": "/Coffee/v2",
     "paths": {}
 }

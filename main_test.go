@@ -4,7 +4,6 @@ package main
 // 	"fmt"
 // 	"testing"
 
-// 	"github.com/go-swagger/go-swagger/examples/cli/client"
 // )
 
 // func TestClinet(t *testing.T) {

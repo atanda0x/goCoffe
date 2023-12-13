@@ -23,18 +23,16 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
+	Version:          "1.0",
 	Host:             "localhost:8080",
-	BasePath:         "",
+	BasePath:         "/Coffee/v2",
 	Schemes:          []string{},
 	Title:            "classification of Coffee Product API",
-	Description:      "",
+	Description:      "for Coffee Product API",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",
 	RightDelim:       "}}",
 }
 
-func init() {
-	swag.Register(SwaggerInfo.InstanceName(), SwaggerInfo)
-}
+
